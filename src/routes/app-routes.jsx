@@ -8,6 +8,8 @@ import ErrorBoundary from "@/components/error-boundry/error-boundry";
 import ForgotPassword from "@/components/forgot-password/forgot-password";
 import SignUpAuth from "@/components/auth/signup-auth";
 import LoadingBar from "@/components/loader/loading-bar";
+import ManufacturerList from "@/app/manufacturer/manufacturer";
+import VendorList from "@/app/vendor/vendor";
 import { Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import AuthRoute from "./auth-route";
@@ -60,6 +62,22 @@ function AppRoutes() {
             element={
               <Suspense fallback={<LoadingBar />}>
                 <UserViewCylinder />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/manufacturer"
+            element={
+              <Suspense fallback={<LoadingBar />}>
+                <ManufacturerList />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/vendor"
+            element={
+              <Suspense fallback={<LoadingBar />}>
+                <VendorList />
               </Suspense>
             }
           />
