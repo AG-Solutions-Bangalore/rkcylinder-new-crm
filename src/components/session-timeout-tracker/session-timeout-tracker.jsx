@@ -44,45 +44,9 @@ const SessionTimeoutTracker = ({ expiryTime, onLogout }) => {
   };
 
   React.useEffect(() => {
-    if (!isInitialized) return;
-
-    const originalFetch = window.fetch;
-
-    window.fetch = async (...args) => {
-      const response = await originalFetch(...args);
-
-      const url = args[0] || "";
-      if (typeof url === "string" && url.includes("/api/")) {
-        try {
-          const clonedResponse = response.clone();
-          const data = await clonedResponse.json();
-
-          if (data?.message === "Unauthenticated." && isTokenPresent()) {
-            onLogout();
-          }
-        } catch (error) {
-        }
-      }
-
-      return response;
-    };
-
-    return () => {
-      window.fetch = originalFetch;
-    };
-  }, [onLogout, isInitialized]);
-
-  React.useEffect(() => {
-    if (!isInitialized) return;
-
-    const checkCookieChange = () => {
-      queryClient.invalidateQueries({ queryKey: ["session-validation"] });
-    };
-
-    const interval = setInterval(checkCookieChange, 3000);
-
-    return () => clearInterval(interval);
-  }, [queryClient, isInitialized]);
+    // Monkey-patching window.fetch is expensive and redundant with apiClient interceptors
+    // The apiClient already handles 401 Unauthorized globally.
+  }, []);
 
   const { data: sessionStatus } = useQuery({
     queryKey: ["session-validation", expiryTime],

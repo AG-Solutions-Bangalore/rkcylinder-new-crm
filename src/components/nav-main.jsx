@@ -55,6 +55,7 @@ export function NavMain({ items }) {
       <SidebarMenu>
         {items.map((item) => {
           const renderItem = (item, depth = 0) => {
+            if (!item) return null;
             const hasSubItems = item.items && item.items.length > 0;
             const isItemActive = location.pathname === item.url;
             const isParentActive = hasSubItems

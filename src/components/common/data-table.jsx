@@ -43,6 +43,7 @@ const DataTable = ({
   extraButton,
   expandableRow,
   serverPagination,
+  loading = false,
 }) => {
   const isServer = !!serverPagination;
   const [sorting, setSorting] = useState([]);
@@ -238,7 +239,16 @@ const DataTable = ({
           </TableHeader>
 
           <TableBody>
-            {table.getRowModel().rows.length ? (
+            {loading ? (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length + (expandableRow ? 2 : 1)}
+                  className="text-center py-20 font-medium text-muted-foreground"
+                >
+                  Loading data...
+                </TableCell>
+              </TableRow>
+            ) : table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
                 <Fragment key={row.id}>
                   <TableRow>
@@ -279,7 +289,10 @@ const DataTable = ({
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length + 1} className="text-center">
+                <TableCell
+                  colSpan={columns.length + (expandableRow ? 2 : 1)}
+                  className="text-center py-20 font-medium text-muted-foreground"
+                >
                   No data found
                 </TableCell>
               </TableRow>

@@ -118,6 +118,20 @@ export default function LoginForm({
               </>
             )}
           </Button>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.95 }}
+            className="text-center text-sm text-dark/60 mt-6"
+          >
+            Don't have an account?{" "}
+            <Link
+              to="/signup"
+              className="text-primary font-semibold hover:underline transition-colors"
+            >
+              Sign Up
+            </Link>
+          </motion.p>
         </div>
       </form>
     </motion.div>

@@ -1,9 +1,8 @@
 import LoadingBar from "@/components/loader/loading-bar";
 import { PANEL_CHECK } from "@/constants/apiConstants";
 import { useApiMutation } from "@/hooks/useApiMutation";
-import { logout, setVersion } from "@/store/auth/authSlice";
+import apiClient from "@/api/apiClient";
 import { setCompanyDetails, setCompanyImage } from "@/store/auth/companySlice";
-import { persistor } from "@/store/store";
 import appLogout from "@/utils/logout";
 import { createContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -56,8 +55,10 @@ const AppProvider = ({ children }) => {
 
   const pollPanelStatus = async () => {
     try {
-      const res = await trigger({ url: PANEL_CHECK.getPanelStatus });
-      const statusMessage = res?.message || res?.msg || res?.success;
+      // Use direct apiClient call to avoid triggering root-level re-render via useApiMutation's loading state
+      const res = await apiClient.get(PANEL_CHECK.getPanelStatus);
+      const panelRes = res.data;
+      const statusMessage = panelRes?.message || panelRes?.msg || panelRes?.success;
       if (statusMessage?.toLowerCase() !== "success" && statusMessage?.toLowerCase() !== "ok") {
         throw new Error();
       }

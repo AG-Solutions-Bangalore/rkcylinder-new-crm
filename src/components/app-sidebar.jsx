@@ -33,201 +33,65 @@ import { useSelector } from "react-redux";
 
 const NAVIGATION_CONFIG = {
   COMMON: {
-    DASHBOARD: {
-      title: "Dashboard",
-      url: "/home",
-      icon: LayoutDashboard,
-    },
-    MASTER: {
-      title: "Master",
-      url: "#",
-      icon: Settings,
-      items: [
-        {
-          title: "Component",
-          url: "/component",
-          icon: Wrench,
-        },
-        {
-          title: "Product",
-          url: "/product",
-          icon: Package,
-        },
-
-        {
-          title: "BOM",
-          url: "/bom",
-          icon: Layers,
-        },
-        {
-          title: "Vendor",
-          url: "/vendor",
-          icon: Truck,
-        },
-      ],
-    },
-    PURCHASE: {
-      title: "Purchase",
-      url: "#1",
-      icon: ShoppingCart,
-      items: [
-        {
-          title: "Product",
-          url: "/purchase-product",
-          icon: Package,
-        },
-        {
-          title: "Component",
-          url: "/purchase-component",
-          icon: Wrench,
-        },
-      ],
-    },
-
-    ORDER: {
-      title: "Order",
-      url: "/order",
-      icon: ClipboardList,
-    },
-    PRODUCTION: {
-      title: "Production",
-      url: "/production",
+    Manufacturer: {
+      title: "Manufacturer",
+      url: "/manufacturer",
       icon: Factory,
     },
-    REPORT: {
-      title: "Report",
-      url: "#2",
-      icon: BarChart3,
-      items: [
-        {
-          title: "Finished Stock",
-          url: "/report/productstock",
-          icon: PackageCheck,
-        },
-        {
-          title: "Component Stock",
-          url: "/report/componentstock",
-          icon: Boxes,
-        },
-        {
-          title: "Purchase Product",
-          url: "/report/purchaseproduct",
-          icon: FileDown,
-        },
-        {
-          title: "Purchase Component",
-          url: "/report/purchasecomponent",
-          icon: FileDown,
-        },
-        {
-          title: "Order",
-          url: "/report/order",
-          icon: ClipboardList,
-        },
-      ],
+    Vendor: {
+      title: "Vendor",
+      url: "/vendor",
+      icon: Truck,
+    },
+    Cylinder: {
+      title: "Cylinder",
+      url: "/cylinder",
+      icon: Boxes,
     },
     SETTINGS: {
       title: "Settings",
       url: "/settings",
       icon: Cog,
     },
-  },
-};
-
-const USER_ROLE_PERMISSIONS = {
-  1: {
-    navMain: [
-      "DASHBOARD",
-      "MASTER",
-      "PURCHASE",
-      "ORDER",
-      "PRODUCTION",
-      "REPORT",
-      "SETTINGS",
-    ],
-    navMainReport: ["DASHBOARD", "MASTER", "SETTINGS"],
-  },
-
-  2: {
-    navMain: [
-      "DASHBOARD",
-      "MASTER",
-      "PURCHASE",
-      "ORDER",
-      "PRODUCTION",
-      "REPORT",
-      "SETTINGS",
-    ],
-    navMainReport: ["DASHBOARD", "MASTER", "SETTINGS"],
-  },
-
-  3: {
-    navMain: [
-      "DASHBOARD",
-      "MASTER",
-      "PURCHASE",
-      "ORDER",
-      "PRODUCTION",
-      "REPORT",
-      "SETTINGS",
-    ],
-    navMainReport: ["DASHBOARD", "MASTER", "SETTINGS"],
-  },
-
-  4: {
-    navMain: [
-      "DASHBOARD",
-      "MASTER",
-      "PURCHASE",
-      "ORDER",
-      "PRODUCTION",
-      "REPORT",
-      "SETTINGS",
-    ],
-    navMainReport: ["DASHBOARD", "MASTER", "SETTINGS"],
-  },
-};
-
-const LIMITED_MASTER_SETTINGS = {
-  title: "Master Settings",
-  url: "#",
-  isActive: false,
-  icon: Settings2,
-  items: [
-    {
-      title: "Chapters",
-      url: "/master/chapter",
+    REPORTS: {
+      title: "Reports",
+      url: "#",
+      icon: BarChart3,
+      items: [
+        {
+          title: "Vendor Report",
+          url: "/report/vendor",
+          icon : FileDown,
+        },
+        {
+          title: "Manufacturer Report",
+          url: "/report/manufacturer",
+          icon : FileDown,
+        },
+        {
+          title: "General Report",
+          url: "/report/general",
+          icon : FileDown,
+        },
+        {
+          title: "Cylinder Details",
+          url: "/report/cylinder-details",
+          icon : FileDown,
+        },
+      ],
     },
-  ],
+  },
 };
 
 const useNavigationData = (userType) => {
   return useMemo(() => {
-    const permissions =
-      USER_ROLE_PERMISSIONS[userType] || USER_ROLE_PERMISSIONS[1];
-
-    const buildNavItems = (permissionKeys, config, customItems = {}) => {
-      return permissionKeys
-        .map((key) => {
-          if (key === "MASTER_SETTINGS_LIMITED") {
-            return LIMITED_MASTER_SETTINGS;
-          }
-          return config[key];
-        })
-        .filter(Boolean);
-    };
-
-    const navMain = buildNavItems(
-      permissions.navMain,
-      // { ...NAVIGATION_CONFIG.COMMON, ...NAVIGATION_CONFIG.MODULES },
-      { ...NAVIGATION_CONFIG.COMMON },
-      // { MASTER_SETTINGS_LIMITED: LIMITED_MASTER_SETTINGS }
-    );
-
-    // const navMainReport = buildNavItems(
-    //   permissions.navMainReport,
-    //   NAVIGATION_CONFIG.REPORTS
-    // );
+    const navMain = [
+      NAVIGATION_CONFIG.COMMON.Cylinder,
+      NAVIGATION_CONFIG.COMMON.Manufacturer,
+      NAVIGATION_CONFIG.COMMON.Vendor,
+      NAVIGATION_CONFIG.COMMON.REPORTS,
+      NAVIGATION_CONFIG.COMMON.SETTINGS,
+    ];
 
     return { navMain };
   }, [userType]);
@@ -294,4 +158,4 @@ export function AppSidebar({ ...props }) {
   );
 }
 
-export { NAVIGATION_CONFIG, USER_ROLE_PERMISSIONS };
+export { NAVIGATION_CONFIG };

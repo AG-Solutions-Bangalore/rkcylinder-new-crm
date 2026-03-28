@@ -2,18 +2,18 @@ import ApiErrorPage from "@/components/api-error/api-error";
 import DataTable from "@/components/common/data-table";
 import LoadingBar from "@/components/loader/loading-bar";
 import { Button } from "@/components/ui/button";
-import { COUNTRY_API } from "@/constants/apiConstants";
+import { VENDOR_API } from "@/constants/apiConstants";
 import { useGetApiMutation } from "@/hooks/useGetApiMutation";
 import { Edit } from "lucide-react";
 import { useState } from "react";
-import CountryForm from "./country-form";
+import VendorForm from "./vendor-form";
 
-const CountryList = () => {
+const VendorList = () => {
   const [selectedId, setSelectedId] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { data, isLoading, isError, refetch } = useGetApiMutation({
-    url: COUNTRY_API.list,
-    queryKey: ["countrylist"],
+    url: VENDOR_API.list,
+    queryKey: ["vendorlist"],
   });
 
   const handleCreate = () => {
@@ -27,16 +27,15 @@ const CountryList = () => {
   };
 
   const columns = [
-    { header: "Country", accessorKey: "country_name" },
-    { header: "City", accessorKey: "country_city" },
-    { header: "Latitude", accessorKey: "country_latitude" },
-    { header: "Longitude", accessorKey: "country_longitude" },
+    { header: "Name", accessorKey: "vendor_name" },
+    { header: "Mobile", accessorKey: "vendor_mobile" },
+    { header: "Email", accessorKey: "vendor_email" },
+    { header: "State", accessorKey: "vendor_state" },
     {
       header: "Status",
-      accessorKey: "country_status",
+      accessorKey: "vendor_status",
       cell: ({ row }) => {
-        const status = row.original.country_status;
-
+        const status = row.original.vendor_status;
         const isActive = status === "Active" || status === 1;
 
         return (
@@ -66,31 +65,32 @@ const CountryList = () => {
       ),
     },
   ];
+
   if (isError) {
     return <ApiErrorPage onRetry={() => refetch()} />;
   }
+
   return (
     <>
       {isLoading && <LoadingBar />}
-
       <DataTable
-        data={data?.data || []}
+        data={data?.vendor || []}
         columns={columns}
+        loading={isLoading}
         pageSize={10}
-        searchPlaceholder="Search country..."
+        searchPlaceholder="Search vendor..."
         addButton={{
           onClick: handleCreate,
-          label: "Add Country",
+          label: "Add Vendor",
         }}
       />
-
-      <CountryForm
+      <VendorForm
         isOpen={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}
-        countryId={selectedId}
+        vendorId={selectedId}
       />
     </>
   );
 };
 
-export default CountryList;
+export default VendorList;
