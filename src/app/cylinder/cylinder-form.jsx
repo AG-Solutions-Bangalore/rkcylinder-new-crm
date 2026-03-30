@@ -26,7 +26,7 @@ const initialState = {
   cylinder_year: new Date().getFullYear().toString(),
   cylinder_date: new Date().toISOString().split("T")[0],
   cylinder_vendor_id: "",
-  cylinder_count: "",
+  cylinder_count: 0,
   cylinder_batch_nos: "",
 };
 
@@ -117,21 +117,13 @@ const CylinderForm = ({ isOpen, onClose }) => {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>Create Cylinder Batch</DialogTitle>
+          <DialogTitle>Create Cylinder</DialogTitle>
         </DialogHeader>
 
         {(submitLoading || batchLoading) && <LoadingBar />}
 
         <div className="space-y-4 py-4">
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Batch No *</label>
-              <Input
-                value={data.cylinder_batch_nos}
-                readOnly
-                className="bg-muted"
-              />
-            </div>
             <div className="space-y-2">
               <label className="text-sm font-medium">Date *</label>
               <Input
@@ -142,32 +134,13 @@ const CylinderForm = ({ isOpen, onClose }) => {
                 }
               />
             </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium">Cylinder Year *</label>
+              <label className="text-sm font-medium">R K Batch No *</label>
               <Input
-                placeholder="Year"
-                value={data.cylinder_year}
-                onChange={(e) =>
-                  setData({ ...data, cylinder_year: e.target.value })
-                }
+                value={data.cylinder_batch_nos}
+                readOnly
+                className="bg-muted"
               />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Count *</label>
-              <Input
-                placeholder="Count"
-                type="number"
-                value={data.cylinder_count}
-                onChange={(e) =>
-                  setData({ ...data, cylinder_count: e.target.value })
-                }
-              />
-              {errors.cylinder_count && (
-                <p className="text-xs text-red-500">{errors.cylinder_count}</p>
-              )}
             </div>
           </div>
 

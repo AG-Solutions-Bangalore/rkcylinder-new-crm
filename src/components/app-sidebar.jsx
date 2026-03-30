@@ -11,20 +11,10 @@ import {
 import {
   AudioWaveform,
   Command,
-  GalleryVerticalEnd,
-  Settings,
-  Settings2,
-  LayoutDashboard,
   Boxes,
-  Package,
-  Layers,
   Truck,
-  ShoppingCart,
-  Wrench,
-  ClipboardList,
   Factory,
   BarChart3,
-  PackageCheck,
   FileDown,
   Cog,
 } from "lucide-react";
@@ -61,22 +51,22 @@ const NAVIGATION_CONFIG = {
         {
           title: "Vendor Report",
           url: "/report/vendor",
-          icon : FileDown,
+          icon: FileDown,
         },
         {
           title: "Manufacturer Report",
           url: "/report/manufacturer",
-          icon : FileDown,
+          icon: FileDown,
         },
         {
           title: "General Report",
           url: "/report/general",
-          icon : FileDown,
+          icon: FileDown,
         },
         {
           title: "Cylinder Details",
           url: "/report/cylinder-details",
-          icon : FileDown,
+          icon: FileDown,
         },
       ],
     },
@@ -86,9 +76,9 @@ const NAVIGATION_CONFIG = {
 const useNavigationData = (userType) => {
   return useMemo(() => {
     const navMain = [
-      NAVIGATION_CONFIG.COMMON.Cylinder,
       NAVIGATION_CONFIG.COMMON.Manufacturer,
       NAVIGATION_CONFIG.COMMON.Vendor,
+      NAVIGATION_CONFIG.COMMON.Cylinder,
       NAVIGATION_CONFIG.COMMON.REPORTS,
       NAVIGATION_CONFIG.COMMON.SETTINGS,
     ];

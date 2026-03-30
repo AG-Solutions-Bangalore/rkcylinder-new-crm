@@ -28,8 +28,10 @@ export const CYLINDER_API = {
   list: "web-fetch-cylinder-list",
   batchNo: "web-fetch-batch-no",
   create: "web-create-cylinder",
+  createSub: "web-create-cylinder-sub",
   updateSub: (id) => `web-update-cylinder-new/${id}`,
-  byId: (id) => `web-fetch-cylinder-by-id/${id}`,
+  byId: (id) => `web-fetch-cylinder-by-id-new/${id}`,
+  subById: (id) => `web-fetch-cylinder-by-id-new/${id}`,
   detailsByBarcode: (barcode) => `web-fetch-cylinder-details-by-barcode/${barcode}`,
 };
 

@@ -126,56 +126,76 @@ const VendorForm = ({ isOpen, onClose, vendorId }) => {
             <Input
               placeholder="Name"
               value={data.vendor_name}
-              onChange={(e) => setData({ ...data, vendor_name: e.target.value })}
+              onChange={(e) =>
+                setData({ ...data, vendor_name: e.target.value })
+              }
             />
-            {errors.vendor_name && <p className="text-xs text-red-500">{errors.vendor_name}</p>}
+            {errors.vendor_name && (
+              <p className="text-xs text-red-500">{errors.vendor_name}</p>
+            )}
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium">Mobile *</label>
+              <label className="text-sm font-medium">Mobile</label>
               <Input
                 placeholder="Mobile"
                 value={data.vendor_mobile}
-                onChange={(e) => setData({ ...data, vendor_mobile: e.target.value })}
+                onChange={(e) =>
+                  setData({ ...data, vendor_mobile: e.target.value })
+                }
               />
-              {errors.vendor_mobile && <p className="text-xs text-red-500">{errors.vendor_mobile}</p>}
+              {errors.vendor_mobile && (
+                <p className="text-xs text-red-500">{errors.vendor_mobile}</p>
+              )}
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium">Email *</label>
+              <label className="text-sm font-medium">Email</label>
               <Input
                 placeholder="Email"
                 type="email"
                 value={data.vendor_email}
-                onChange={(e) => setData({ ...data, vendor_email: e.target.value })}
+                onChange={(e) =>
+                  setData({ ...data, vendor_email: e.target.value })
+                }
               />
-              {errors.vendor_email && <p className="text-xs text-red-500">{errors.vendor_email}</p>}
+              {errors.vendor_email && (
+                <p className="text-xs text-red-500">{errors.vendor_email}</p>
+              )}
             </div>
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">State *</label>
+            <label className="text-sm font-medium">State</label>
             <Input
               placeholder="State"
               value={data.vendor_state}
-              onChange={(e) => setData({ ...data, vendor_state: e.target.value })}
+              onChange={(e) =>
+                setData({ ...data, vendor_state: e.target.value })
+              }
             />
-            {errors.vendor_state && <p className="text-xs text-red-500">{errors.vendor_state}</p>}
+            {errors.vendor_state && (
+              <p className="text-xs text-red-500">{errors.vendor_state}</p>
+            )}
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">Address *</label>
+            <label className="text-sm font-medium">Address</label>
             <Input
               placeholder="Address"
               value={data.vendor_address}
-              onChange={(e) => setData({ ...data, vendor_address: e.target.value })}
+              onChange={(e) =>
+                setData({ ...data, vendor_address: e.target.value })
+              }
             />
-            {errors.vendor_address && <p className="text-xs text-red-500">{errors.vendor_address}</p>}
+            {errors.vendor_address && (
+              <p className="text-xs text-red-500">{errors.vendor_address}</p>
+            )}
           </div>
 
           {isEditMode && (
             <div className="space-y-2">
-              <label className="text-sm font-medium">Status *</label>
+              <label className="text-sm font-medium">Status</label>
               <GroupButton
                 className="w-fit"
                 value={data.vendor_status}
@@ -190,7 +210,9 @@ const VendorForm = ({ isOpen, onClose, vendorId }) => {
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
+          <Button variant="outline" onClick={onClose}>
+            Cancel
+          </Button>
           <Button onClick={handleSave} disabled={submitLoading}>
             {isEditMode ? "Update" : "Create"}
           </Button>

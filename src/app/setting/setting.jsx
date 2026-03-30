@@ -28,7 +28,7 @@ const Settings = () => {
               {["default", "yellow", "green", "purple", "teal", "gray"].map(
                 (color) => {
                   const colorsMap = {
-                    default: "bg-green-900",
+                    default: "bg-blue-600",
                     yellow: "bg-yellow-500",
                     green: "bg-green-600",
                     purple: "bg-purple-600",

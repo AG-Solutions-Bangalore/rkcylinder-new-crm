@@ -9,7 +9,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { CYLINDER_API, MANUFACTURER_API } from "@/constants/apiConstants";
 import { useApiMutation } from "@/hooks/use-mutation";
 import { useGetApiMutation } from "@/hooks/useGetApiMutation";
@@ -42,7 +48,7 @@ const CylinderSubForm = ({ isOpen, onClose, subId, cylinderId }) => {
   const isEditMode = Boolean(subId);
   const { userInfo } = useContext(ContextPanel);
   const isBranchTwo = userInfo?.branchId === "2" || userInfo?.branchId === 2;
-  
+
   const [data, setData] = useState(initialState);
   const [errors, setErrors] = useState({});
   const { trigger: fetchSub, loading } = useApiMutation();
@@ -66,15 +72,16 @@ const CylinderSubForm = ({ isOpen, onClose, subId, cylinderId }) => {
     const fetchData = async () => {
       try {
         const res = await fetchSub({
-          url: `web-fetch-cylinder-sub-by-id/${subId}`,
+          url: CYLINDER_API.subById(subId),
         });
 
         console.log("Cylinder Sub Detail Response:", res);
-        const subData = res?.cylindersub || res?.data;
+        const subData = res?.cylinderSub || res?.cylindersub || res?.data?.cylinderSub || res?.data?.cylindersub || res?.data;
         if (subData) {
           setData({
             ...subData,
-            cylinder_sub_manufacturer_id: subData.cylinder_sub_manufacturer_id?.toString() || "",
+            cylinder_sub_manufacturer_id:
+              subData.cylinder_sub_manufacturer_id?.toString() || "",
             depressurization: subData.depressurization || "No",
             cleaning: subData.cleaning || "No",
             inspection: subData.inspection || "No",
@@ -92,10 +99,20 @@ const CylinderSubForm = ({ isOpen, onClose, subId, cylinderId }) => {
 
   const validate = () => {
     const newErrors = {};
-    if (!data.cylinder_sub_barcode?.trim()) newErrors.cylinder_sub_barcode = "Required";
-    if (!data.cylinder_sub_company_no?.trim()) newErrors.cylinder_sub_company_no = "Required";
-    if (!data.cylinder_sub_manufacturer_id) newErrors.cylinder_sub_manufacturer_id = "Required";
-    
+    if (!data.cylinder_sub_barcode?.trim())
+      newErrors.cylinder_sub_barcode = "Required";
+    if (!data.cylinder_sub_company_no?.trim())
+      newErrors.cylinder_sub_company_no = "Required";
+    if (!data.cylinder_sub_manufacturer_id)
+      newErrors.cylinder_sub_manufacturer_id = "Required";
+    if (!data.cylinder_sub_manufacturer_month)
+      newErrors.cylinder_sub_manufacturer_month = "Required";
+    if (!data.cylinder_sub_manufacturer_year)
+      newErrors.cylinder_sub_manufacturer_year = "Required";
+    if (!data.cylinder_sub_weight) newErrors.cylinder_sub_weight = "Required";
+    if (!data.cylinder_sub_batch_no)
+      newErrors.cylinder_sub_batch_no = "Required";
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -104,22 +121,26 @@ const CylinderSubForm = ({ isOpen, onClose, subId, cylinderId }) => {
     if (!validate()) return;
 
     const formData = new FormData();
-    Object.keys(data).forEach(key => {
-        formData.append(key, data[key]);
+    Object.keys(data).forEach((key) => {
+      formData.append(key, data[key]);
     });
     formData.append("id", cylinderId); // Main batch id is often sent as 'id' in create sub
 
     try {
       const res = await submitSub({
-        url: isEditMode ? CYLINDER_API.updateSub(subId) : "web-create-cylinder-sub",
+        url: isEditMode
+          ? CYLINDER_API.updateSub(subId)
+          : CYLINDER_API.createSub,
         method: isEditMode ? "put" : "post",
         data: formData,
       });
 
       if (res?.code === 200 || res?.code === 201) {
         toast.success(res?.msg || "Saved successfully");
-        queryClient.invalidateQueries({ queryKey: ["cylindersublist", cylinderId] });
-        
+        queryClient.invalidateQueries({
+          queryKey: ["cylindersublist", cylinderId],
+        });
+
         if (stayOpen) {
           setData(initialState);
           setErrors({});
@@ -147,28 +168,42 @@ const CylinderSubForm = ({ isOpen, onClose, subId, cylinderId }) => {
 
         <div className="grid grid-cols-2 gap-4 py-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium">Barcode (RK Serial) *</label>
+            <label className="text-sm font-medium">RK Serial No *</label>
             <Input
-              placeholder="Barcode"
+              placeholder="RK Serial No"
               value={data.cylinder_sub_barcode}
-              onChange={(e) => setData({ ...data, cylinder_sub_barcode: e.target.value })}
+              onChange={(e) =>
+                setData({ ...data, cylinder_sub_barcode: e.target.value })
+              }
             />
-            {errors.cylinder_sub_barcode && <p className="text-xs text-red-500">{errors.cylinder_sub_barcode}</p>}
+            {errors.cylinder_sub_barcode && (
+              <p className="text-xs text-red-500">
+                {errors.cylinder_sub_barcode}
+              </p>
+            )}
           </div>
           <div className="space-y-2">
             <label className="text-sm font-medium">Cylinder No *</label>
             <Input
               placeholder="Cylinder No"
               value={data.cylinder_sub_company_no}
-              onChange={(e) => setData({ ...data, cylinder_sub_company_no: e.target.value })}
+              onChange={(e) =>
+                setData({ ...data, cylinder_sub_company_no: e.target.value })
+              }
             />
-            {errors.cylinder_sub_company_no && <p className="text-xs text-red-500">{errors.cylinder_sub_company_no}</p>}
+            {errors.cylinder_sub_company_no && (
+              <p className="text-xs text-red-500">
+                {errors.cylinder_sub_company_no}
+              </p>
+            )}
           </div>
 
           <div className="space-y-2">
             <label className="text-sm font-medium">Manufacturer *</label>
             <Select
-              onValueChange={(value) => setData({ ...data, cylinder_sub_manufacturer_id: value })}
+              onValueChange={(value) =>
+                setData({ ...data, cylinder_sub_manufacturer_id: value })
+              }
               value={data.cylinder_sub_manufacturer_id}
             >
               <SelectTrigger>
@@ -182,69 +217,116 @@ const CylinderSubForm = ({ isOpen, onClose, subId, cylinderId }) => {
                 ))}
               </SelectContent>
             </Select>
-            {errors.cylinder_sub_manufacturer_id && <p className="text-xs text-red-500">{errors.cylinder_sub_manufacturer_id}</p>}
+            {errors.cylinder_sub_manufacturer_id && (
+              <p className="text-xs text-red-500">
+                {errors.cylinder_sub_manufacturer_id}
+              </p>
+            )}
           </div>
 
           <div className="grid grid-cols-2 gap-2">
             <div className="space-y-2">
-              <label className="text-sm font-medium">Month</label>
+              <label className="text-sm font-medium">Month *</label>
               <Input
                 placeholder="MM"
                 value={data.cylinder_sub_manufacturer_month}
-                onChange={(e) => setData({ ...data, cylinder_sub_manufacturer_month: e.target.value })}
+                onChange={(e) =>
+                  setData({
+                    ...data,
+                    cylinder_sub_manufacturer_month: e.target.value,
+                  })
+                }
               />
+              {errors.cylinder_sub_manufacturer_month && (
+                <p className="text-xs text-red-500">
+                  {errors.cylinder_sub_manufacturer_month}
+                </p>
+              )}
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium">Year</label>
+              <label className="text-sm font-medium">Year *</label>
               <Input
                 placeholder="YY"
                 value={data.cylinder_sub_manufacturer_year}
-                onChange={(e) => setData({ ...data, cylinder_sub_manufacturer_year: e.target.value })}
+                onChange={(e) =>
+                  setData({
+                    ...data,
+                    cylinder_sub_manufacturer_year: e.target.value,
+                  })
+                }
               />
+              {errors.cylinder_sub_manufacturer_year && (
+                <p className="text-xs text-red-500">
+                  {errors.cylinder_sub_manufacturer_year}
+                </p>
+              )}
             </div>
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">Batch No</label>
+            <label className="text-sm font-medium">Batch No *</label>
             <Input
               placeholder="Batch No"
               value={data.cylinder_sub_batch_no}
-              onChange={(e) => setData({ ...data, cylinder_sub_batch_no: e.target.value })}
+              onChange={(e) =>
+                setData({ ...data, cylinder_sub_batch_no: e.target.value })
+              }
             />
+            {errors.cylinder_sub_batch_no && (
+              <p className="text-xs text-red-500">
+                {errors.cylinder_sub_batch_no}
+              </p>
+            )}
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-medium">Tare Weight</label>
+            <label className="text-sm font-medium">Tare Weight *</label>
             <Input
               placeholder="Weight"
               value={data.cylinder_sub_weight}
-              onChange={(e) => setData({ ...data, cylinder_sub_weight: e.target.value })}
+              onChange={(e) =>
+                setData({ ...data, cylinder_sub_weight: e.target.value })
+              }
             />
+            {errors.cylinder_sub_weight && (
+              <p className="text-xs text-red-500">
+                {errors.cylinder_sub_weight}
+              </p>
+            )}
           </div>
 
           {isBranchTwo && (
             <>
               <div className="space-y-2">
-                <label className="text-sm font-medium">Prev Test Date</label>
+                <label className="text-sm font-medium">Prev Test Date *</label>
                 <Input
                   type="date"
                   value={data.cylinder_sub_previous_test_date}
-                  onChange={(e) => setData({ ...data, cylinder_sub_previous_test_date: e.target.value })}
+                  onChange={(e) =>
+                    setData({
+                      ...data,
+                      cylinder_sub_previous_test_date: e.target.value,
+                    })
+                  }
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">NTD</label>
+                <label className="text-sm font-medium">NTD *</label>
                 <Input
                   type="date"
                   value={data.cylinder_sub_n_t_d}
-                  onChange={(e) => setData({ ...data, cylinder_sub_n_t_d: e.target.value })}
+                  onChange={(e) =>
+                    setData({ ...data, cylinder_sub_n_t_d: e.target.value })
+                  }
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">N-Weight</label>
+                <label className="text-sm font-medium">N-Weight *</label>
                 <Input
                   placeholder="N-Weight"
                   value={data.cylinder_sub_n_weight}
-                  onChange={(e) => setData({ ...data, cylinder_sub_n_weight: e.target.value })}
+                  onChange={(e) =>
+                    setData({ ...data, cylinder_sub_n_weight: e.target.value })
+                  }
                 />
               </div>
             </>
@@ -252,29 +334,46 @@ const CylinderSubForm = ({ isOpen, onClose, subId, cylinderId }) => {
 
           {isBranchTwo && isEditMode && (
             <div className="col-span-2 border-t pt-4 mt-2">
-               <h3 className="text-sm font-bold mb-4">Quality Checks</h3>
-               <div className="grid grid-cols-2 gap-4">
-                  {['depressurization', 'cleaning', 'inspection', 'bung_check', 'hydro_testing'].map((field) => (
-                    <div key={field} className="flex flex-col gap-2">
-                      <label className="text-xs font-semibold capitalize">{field.replace('_', ' ')}</label>
-                      <GroupButton
-                        className="w-fit"
-                        value={data[field]}
-                        onChange={(val) => setData({ ...data, [field]: val })}
-                        options={[{ label: "Yes", value: "Yes" }, { label: "No", value: "No" }]}
-                      />
-                    </div>
-                  ))}
-               </div>
+              <h3 className="text-sm font-bold mb-4">Quality Checks</h3>
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  "depressurization",
+                  "cleaning",
+                  "inspection",
+                  "bung_check",
+                  "hydro_testing",
+                ].map((field) => (
+                  <div key={field} className="flex flex-col gap-2">
+                    <label className="text-xs font-semibold capitalize">
+                      {field.replace("_", " ")} *
+                    </label>
+                    <GroupButton
+                      className="w-fit"
+                      value={data[field]}
+                      onChange={(val) => setData({ ...data, [field]: val })}
+                      options={[
+                        { label: "Yes", value: "Yes" },
+                        { label: "No", value: "No" },
+                      ]}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>
 
         <DialogFooter className="flex justify-between">
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
+          <Button variant="outline" onClick={onClose}>
+            Cancel
+          </Button>
           <div className="flex gap-2">
             {!isEditMode && (
-              <Button onClick={() => handleSave(true)} disabled={submitLoading} variant="secondary">
+              <Button
+                onClick={() => handleSave(true)}
+                disabled={submitLoading}
+                variant="secondary"
+              >
                 Submit & Next
               </Button>
             )}
