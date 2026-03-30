@@ -29,7 +29,8 @@ const ManufacturerForm = ({ isOpen, onClose, manufacturerId }) => {
   const [data, setData] = useState(initialState);
   const [errors, setErrors] = useState({});
   const { trigger: fetchManufacturer, loading } = useApiMutation();
-  const { trigger: submitManufacturer, loading: submitLoading } = useApiMutation();
+  const { trigger: submitManufacturer, loading: submitLoading } =
+    useApiMutation();
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -56,7 +57,8 @@ const ManufacturerForm = ({ isOpen, onClose, manufacturerId }) => {
             manufacturer_email: manufacturerData.manufacturer_email || "",
             manufacturer_state: manufacturerData.manufacturer_state || "",
             manufacturer_address: manufacturerData.manufacturer_address || "",
-            manufacturer_status: manufacturerData.manufacturer_status || "Active",
+            manufacturer_status:
+              manufacturerData.manufacturer_status || "Active",
           });
         }
       } catch (err) {
@@ -69,11 +71,16 @@ const ManufacturerForm = ({ isOpen, onClose, manufacturerId }) => {
 
   const validate = () => {
     const newErrors = {};
-    if (!data.manufacturer_name.trim()) newErrors.manufacturer_name = "Required";
-    if (!data.manufacturer_mobile.trim()) newErrors.manufacturer_mobile = "Required";
-    if (!data.manufacturer_email.trim()) newErrors.manufacturer_email = "Required";
-    if (!data.manufacturer_state.trim()) newErrors.manufacturer_state = "Required";
-    if (!data.manufacturer_address.trim()) newErrors.manufacturer_address = "Required";
+    if (!data.manufacturer_name.trim())
+      newErrors.manufacturer_name = "Required";
+    if (!data.manufacturer_mobile.trim())
+      newErrors.manufacturer_mobile = "Required";
+    if (!data.manufacturer_email.trim())
+      newErrors.manufacturer_email = "Required";
+    if (!data.manufacturer_state.trim())
+      newErrors.manufacturer_state = "Required";
+    if (!data.manufacturer_address.trim())
+      newErrors.manufacturer_address = "Required";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -92,7 +99,9 @@ const ManufacturerForm = ({ isOpen, onClose, manufacturerId }) => {
 
     try {
       const res = await submitManufacturer({
-        url: isEditMode ? MANUFACTURER_API.updateById(manufacturerId) : MANUFACTURER_API.create,
+        url: isEditMode
+          ? MANUFACTURER_API.updateById(manufacturerId)
+          : MANUFACTURER_API.create,
         method: isEditMode ? "put" : "post",
         data: formData,
       });
@@ -126,51 +135,79 @@ const ManufacturerForm = ({ isOpen, onClose, manufacturerId }) => {
             <Input
               placeholder="Name"
               value={data.manufacturer_name}
-              onChange={(e) => setData({ ...data, manufacturer_name: e.target.value })}
+              onChange={(e) =>
+                setData({ ...data, manufacturer_name: e.target.value })
+              }
             />
-            {errors.manufacturer_name && <p className="text-xs text-red-500">{errors.manufacturer_name}</p>}
+            {errors.manufacturer_name && (
+              <p className="text-xs text-red-500">{errors.manufacturer_name}</p>
+            )}
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium">Mobile *</label>
+              <label className="text-sm font-medium">Mobile</label>
               <Input
                 placeholder="Mobile"
                 value={data.manufacturer_mobile}
-                onChange={(e) => setData({ ...data, manufacturer_mobile: e.target.value })}
+                onChange={(e) =>
+                  setData({ ...data, manufacturer_mobile: e.target.value })
+                }
               />
-              {errors.manufacturer_mobile && <p className="text-xs text-red-500">{errors.manufacturer_mobile}</p>}
+              {errors.manufacturer_mobile && (
+                <p className="text-xs text-red-500">
+                  {errors.manufacturer_mobile}
+                </p>
+              )}
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium">Email *</label>
+              <label className="text-sm font-medium">Email</label>
               <Input
                 placeholder="Email"
                 type="email"
                 value={data.manufacturer_email}
-                onChange={(e) => setData({ ...data, manufacturer_email: e.target.value })}
+                onChange={(e) =>
+                  setData({ ...data, manufacturer_email: e.target.value })
+                }
               />
-              {errors.manufacturer_email && <p className="text-xs text-red-500">{errors.manufacturer_email}</p>}
+              {errors.manufacturer_email && (
+                <p className="text-xs text-red-500">
+                  {errors.manufacturer_email}
+                </p>
+              )}
             </div>
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">State *</label>
+            <label className="text-sm font-medium">State</label>
             <Input
               placeholder="State"
               value={data.manufacturer_state}
-              onChange={(e) => setData({ ...data, manufacturer_state: e.target.value })}
+              onChange={(e) =>
+                setData({ ...data, manufacturer_state: e.target.value })
+              }
             />
-            {errors.manufacturer_state && <p className="text-xs text-red-500">{errors.manufacturer_state}</p>}
+            {errors.manufacturer_state && (
+              <p className="text-xs text-red-500">
+                {errors.manufacturer_state}
+              </p>
+            )}
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">Address *</label>
+            <label className="text-sm font-medium">Address</label>
             <Input
               placeholder="Address"
               value={data.manufacturer_address}
-              onChange={(e) => setData({ ...data, manufacturer_address: e.target.value })}
+              onChange={(e) =>
+                setData({ ...data, manufacturer_address: e.target.value })
+              }
             />
-            {errors.manufacturer_address && <p className="text-xs text-red-500">{errors.manufacturer_address}</p>}
+            {errors.manufacturer_address && (
+              <p className="text-xs text-red-500">
+                {errors.manufacturer_address}
+              </p>
+            )}
           </div>
 
           {isEditMode && (
@@ -179,7 +216,9 @@ const ManufacturerForm = ({ isOpen, onClose, manufacturerId }) => {
               <GroupButton
                 className="w-fit"
                 value={data.manufacturer_status}
-                onChange={(value) => setData({ ...data, manufacturer_status: value })}
+                onChange={(value) =>
+                  setData({ ...data, manufacturer_status: value })
+                }
                 options={[
                   { label: "Active", value: "Active" },
                   { label: "Inactive", value: "Inactive" },
@@ -190,7 +229,9 @@ const ManufacturerForm = ({ isOpen, onClose, manufacturerId }) => {
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
+          <Button variant="outline" onClick={onClose}>
+            Cancel
+          </Button>
           <Button onClick={handleSave} disabled={submitLoading}>
             {isEditMode ? "Update" : "Create"}
           </Button>

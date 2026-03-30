@@ -27,10 +27,16 @@ const ManufacturerList = () => {
   };
 
   const columns = [
+    {
+      header: "SL No",
+      id: "slNo",
+      cell: ({ row }) => row.index + 1,
+    },
     { header: "Name", accessorKey: "manufacturer_name" },
+    { header: "State", accessorKey: "manufacturer_state" },
+
     { header: "Mobile", accessorKey: "manufacturer_mobile" },
     { header: "Email", accessorKey: "manufacturer_email" },
-    { header: "State", accessorKey: "manufacturer_state" },
     {
       header: "Status",
       accessorKey: "manufacturer_status",

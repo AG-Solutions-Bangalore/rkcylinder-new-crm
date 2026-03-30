@@ -27,10 +27,16 @@ const VendorList = () => {
   };
 
   const columns = [
+    {
+      header: "SL No",
+      id: "slNo",
+      cell: ({ row }) => row.index + 1,
+    },
     { header: "Name", accessorKey: "vendor_name" },
+    { header: "State", accessorKey: "vendor_state" },
+
     { header: "Mobile", accessorKey: "vendor_mobile" },
     { header: "Email", accessorKey: "vendor_email" },
-    { header: "State", accessorKey: "vendor_state" },
     {
       header: "Status",
       accessorKey: "vendor_status",

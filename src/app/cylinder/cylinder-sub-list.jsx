@@ -66,26 +66,31 @@ const CylinderSubList = ({ cylinderId, onBack }) => {
     setIsDialogOpen(true);
   };
 
-  const handleCreate = () => {
-    setSelectedSubId(null);
-    setIsDialogOpen(true);
-  }
-
   const columns = [
-    ...(userInfo?.branchId === 1 || userInfo?.branchId === "1" ? [{ header: "R K Serial No", accessorKey: "cylinder_sub_barcode" }] : []),
+    ...(userInfo?.branchId === 1 || userInfo?.branchId === "1"
+      ? [{ header: "R K Serial No", accessorKey: "cylinder_sub_barcode" }]
+      : []),
+
+    { header: "R K Batch No", accessorKey: "cylinder_sub_barcode" },
     { header: "Cylinder No", accessorKey: "cylinder_sub_company_no" },
     { header: "Manufacturer", accessorKey: "manufacturer_name" },
     {
       header: "Month/Year",
-      cell: ({ row }) => `${row.original.cylinder_sub_manufacturer_month}/${row.original.cylinder_sub_manufacturer_year}`,
+      cell: ({ row }) =>
+        `${row.original.cylinder_sub_manufacturer_month}/${row.original.cylinder_sub_manufacturer_year}`,
     },
     { header: "Batch No", accessorKey: "cylinder_sub_batch_no" },
     { header: "Tare Weight", accessorKey: "cylinder_sub_weight" },
-    ...(isBranchTwo ? [
-      { header: "Prev Test Date", accessorKey: "cylinder_sub_previous_test_date" },
-      { header: "NTD", accessorKey: "cylinder_sub_n_t_d" },
-      { header: "N-Weight", accessorKey: "cylinder_sub_n_weight" },
-    ] : []),
+    ...(isBranchTwo
+      ? [
+          {
+            header: "Prev Test Date",
+            accessorKey: "cylinder_sub_previous_test_date",
+          },
+          { header: "NTD", accessorKey: "cylinder_sub_n_t_d" },
+          { header: "N-Weight", accessorKey: "cylinder_sub_n_weight" },
+        ]
+      : []),
     {
       header: "Action",
       cell: ({ row }) => (
@@ -141,15 +146,20 @@ const CylinderSubList = ({ cylinderId, onBack }) => {
 
       {isLoading && <LoadingBar />}
       <DataTable
-        data={detailData?.cylinderSub || detailData?.cylindersub || []}
+        data={(() => {
+          // Normalize the data source (handle case sensitivity and data wrappers)
+          const source = detailData?.data || detailData;
+          const rawData = source?.cylinderSub || source?.cylindersub;
+          
+          if (Array.isArray(rawData)) return rawData;
+          if (rawData && typeof rawData === 'object') return [rawData];
+          
+          return [];
+        })()}
         columns={columns}
         loading={isLoading}
         pageSize={10}
         searchPlaceholder="Search serial..."
-        addButton={{
-          onClick: handleCreate,
-          label: "Add Serial No",
-        }}
       />
       <CylinderSubForm
         isOpen={isDialogOpen}
